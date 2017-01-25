@@ -18,27 +18,34 @@
                     //load and populate referee fields
                     foreach ($user_json['referees'] as $refereeObj) {
                         echo '<div id="referees_' . $refereesTracker . '">';
-                        echo '<div class="form_line_div"><label class="form_element_left">Name</label><input class="form_element_middle" name="referees[' . $refereesTracker . '][refName]" type="text" value="' . $refereeObj['refName'] . '" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refName'] . '" placeholder="' . $examples_json['refName'] .'"/></div>';
-                        echo '<div class="form_line_div"><label class="form_element_left">Position</label><input class="form_element_middle" name="referees[' . $refereesTracker . '][refPosition]" type="text" value="' . $refereeObj['refPosition'] . '" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refPosition'] . '" placeholder="' . $examples_json['refPos'] .'"/></div>';
-                        echo '<div class="form_line_div"><label class="form_element_left">Email</label><input class="form_element_middle" name="referees[' . $refereesTracker . '][refEmail]" type="text" value="' . $refereeObj['refEmail'] . '" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refEmail'] . '" placeholder="' . $examples_json['refEmail'] .'"/></div>';
-                        echo '<div class="form_line_div"><label class="form_element_left">Number</label><input class="form_element_middle" name="referees[' . $refereesTracker . '][refNum]" type="text" value="' . $refereeObj['refNum'] . '" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refNum'] . '" placeholder="' . $examples_json['refNum'] .'" /></div><br></div>';
+                        echo '<div class="form_line_div"><label class="form_element_left">Name</label><input class="form_element_middle" onkeypress="limitToLetters(event)" name="referees[' . $refereesTracker . '][refName]" type="text" maxlength="50" value="' . $refereeObj['refName'] . '" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refName'] . '" placeholder="' . $examples_json['refName'] .'"/></div>';
+                        echo '<div class="form_line_div"><label class="form_element_left">Position</label><input class="form_element_middle" onkeypress="limitToLettersAndNumbers(event)" name="referees[' . $refereesTracker . '][refPosition]" type="text" maxlength="35" value="' . $refereeObj['refPosition'] . '" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refPosition'] . '" placeholder="' . $examples_json['refPos'] .'"/></div>';
+                        echo '<div class="form_line_div"><label class="form_element_left">Email</label><input class="form_element_middle" onkeypress="limitToEmails(event)" name="referees[' . $refereesTracker . '][refEmail]" type="text" maxlength="50" value="' . $refereeObj['refEmail'] . '" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refEmail'] . '" placeholder="' . $examples_json['refEmail'] .'"/></div>';
+                        echo '<div class="form_line_div"><label class="form_element_left">Number</label><input class="form_element_middle" onkeypress="limitToPhoneNumbers(event)" name="referees[' . $refereesTracker . '][refNum]" type="text" maxlength="25" value="' . $refereeObj['refNum'] . '" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refNum'] . '" placeholder="' . $examples_json['refNum'] .'" /></div><br></div>';
                         ++$refereesTracker;
                     }
                     --$refereesTracker;
                 } else {
                     //load empty referee fields
                     echo '<div id="referees_' . $refereesTracker . '">';
-                    echo '<div class="form_line_div"><label class="form_element_left">Name</label><input class="form_element_middle" name="referees[' . $refereesTracker . '][refName]" type="text" value="" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refName'] . '" placeholder="' . $examples_json['refName'] .'" /></div>';
-                    echo '<div class="form_line_div"><label class="form_element_left">Position</label><input class="form_element_middle" name="referees[' . $refereesTracker . '][refPosition]" type="text" value="" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refPosition'] . '" placeholder="' . $examples_json['refPos'] .'"/></div>';
-                    echo '<div class="form_line_div"><label class="form_element_left">Email</label><input class="form_element_middle" name="referees[' . $refereesTracker . '][refEmail]" type="text" value="" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refEmail'] . '" placeholder="' . $examples_json['refEmail'] .'" /></div>';
-                    echo '<div class="form_line_div"><label class="form_element_left">Number</label><input class="form_element_middle" name="referees[' . $refereesTracker . '][refNum]" type="text" value="" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refNum'] . '" placeholder="' . $examples_json['refNum'] .'" /></div><br></div>';
+                    echo '<div class="form_line_div"><label class="form_element_left">Name</label><input class="form_element_middle" onkeypress="limitToLetters(event)" name="referees[' . $refereesTracker . '][refName]" type="text" maxlength="50" value="" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refName'] . '" placeholder="' . $examples_json['refName'] .'" /></div>';
+                    echo '<div class="form_line_div"><label class="form_element_left">Position</label><input class="form_element_middle" onkeypress="limitToLettersAndNumbers(event)" name="referees[' . $refereesTracker . '][refPosition]" type="text" maxlength="35" value="" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refPosition'] . '" placeholder="' . $examples_json['refPos'] .'"/></div>';
+                    echo '<div class="form_line_div"><label class="form_element_left">Email</label><input class="form_element_middle" onkeypress="limitToEmails(event)" name="referees[' . $refereesTracker . '][refEmail]" type="text" maxlength="50" value="" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refEmail'] . '" placeholder="' . $examples_json['refEmail'] .'" /></div>';
+                    echo '<div class="form_line_div"><label class="form_element_left">Number</label><input class="form_element_middle" onkeypress="limitToPhoneNumbers(event)" name="referees[' . $refereesTracker . '][refNum]" type="text" maxlength="25" value="" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['refNum'] . '" placeholder="' . $examples_json['refNum'] .'" /></div><br></div>';
                 }
                 echo '<script>var refereesTracker = ' . $refereesTracker . ';</script>'; //variable for javascript
                 ?>
             </div>
             <div class="form_line_div">
-                <input type="button" id="more_fields_referees" onclick="addReferees();" value="Add Another Referee"/>
-                <input type="button" id="remove_fields_referees" onclick="removeReferees();" value="Remove Last Referee"/>
+                <input type="button" class="add_or_remove_fields_button" id="more_fields_referees" onclick="addReferees();" value="Add Another Referee"/>
+                <!-- Load the remove button as hidden if referees tracker is zero as this means there is only one entry -->
+                <?php
+                if ($refereesTracker == 0)    {
+                    echo '<input type="button" class="add_or_remove_fields_button" id="remove_fields_referees" onclick="removeReferees();" value="Remove Last Referee" hidden/>';
+                } else {
+                    echo '<input type="button" class="add_or_remove_fields_button" id="remove_fields_referees" onclick="removeReferees();" value="Remove Last Referee"/>';
+                }
+                ?>
             </div>
             <br>
         </div>

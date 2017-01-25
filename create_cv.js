@@ -1,15 +1,26 @@
 // Initialize Bootstrap functionality
 
 // Initialize tooltip component
-$(function() {
+
+function initialise_tool_tip () {
     $('[data-toggle="tooltip"]').tooltip();
-});
-
-// Initialize popover component
-$(function() {
     $('[data-toggle="popover"]').popover();
-});
+}
 
+initialise_tool_tip();
+
+// $(function()    {
+//     initilise_tool_tip();
+// });
+// $(function() {
+//     $('[data-toggle="tooltip"]').tooltip();
+//     // $('[data-toggle="popover"]').popover();
+// });
+
+// // Initialize popover component
+// $(function() {
+//     $('[data-toggle="popover"]').popover();
+// });
 
 // Remove arrows from first and last page
 
@@ -42,6 +53,15 @@ jQuery(function() {
     });
 });
 
+
+jQuery(function() {
+    var max = 6;
+    var checkboxes = jQuery('input[type="checkbox"]');
+
+    var current = checkboxes.filter(':checked').length;
+    checkboxes.filter(':not(:checked)').prop('disabled', current >= max);
+});
+
 /**The purpose of this variable is that it's a boolean to track which button was clicked
  This is for the purposes of whether to run validateForm() internal logic or not*/
 var runValidation = false;
@@ -57,9 +77,21 @@ function validateForm() {
         var formInputs = document.getElementsByTagName('input');
         for (var i = 0; i < formInputs.length; i++) {
             formInputs[i].style.border = "";
-        }
 
-        if (!validateItem("firstName", "First Name", 0)) {
+            //Callls function to remove spaces from before and after value
+            formInputs[i].value = removeSpaces(formInputs[i].value);
+            
+        }  
+
+        //To handle removing spaces from text area
+        var textAreaInput = document.getElementsByTagName('textarea');
+        for (var i = 0; i < textAreaInput.length; i++) {
+            
+            textAreaInput[i].value = removeSpaces(textAreaInput[i].value);
+            
+        }  
+       
+        if (!validateItem("firstName", "First Name", 0)) {   
             return false;
         }
         if (!validateItem("lastName", "Last Name", 0)) {
@@ -80,6 +112,21 @@ function validateForm() {
         if (!validateItem("city", "City", 0)) {
             return false;
         }
+
+        //make employment start date mandatory if company name is filled in
+        for (var i = 0; i <= employmentTracker; i++) {
+            if (!validateItemDatePicker("employment[" + i + "][jobCompany]", "employment[" + i + "][startDate]", 2)) {
+                return false;
+            }
+        }
+
+        //make volunteering start date mandatory if company name is filled in
+        for (var i = 0; i <= volunteerTracker; i++) {
+            if (!validateItemDatePicker("volunteering[" + i + "][volCompany]", "volunteering[" + i + "][volStartDate]", 3)) {
+                return false;
+            }
+        }
+
 
         for (var i = 0; i <= educationTracker; i++) {
             if (!validateItem("education[" + i + "][schoolYear]", "Extra education years must be removed and/or all education years", 4)) {
@@ -127,6 +174,22 @@ function validateItem(elementName, elementPrintName, carouselSlide) {
     return true;
 }
 
+/**Used by validateForm() for validating datepickers - prevents dropdown of datepicker on return to slide*/
+function validateItemDatePicker(companyName, startDateName, carouselSlide) {
+    var companyNameValue = document.forms["myForm"][companyName].value;
+    var startDataValue = document.forms["myForm"][startDateName].value;
+
+    if (companyNameValue.length != "" && startDataValue == "") {
+        alert("Start date must be filled out because you have entered " + companyNameValue + ".");
+        $("#wizard_pages").carousel(carouselSlide);
+        document.forms["myForm"][startDateName].style.borderColor = "red";
+        //document.forms["myForm"][elementName].select();
+        return false;
+    }
+    //document.forms["myForm"][startDataValue].style.borderColor = "";
+    return true;
+}
+
 /**The boolean is true if finish was clicked and false if save was clicked
  The purpose of the boolean is to track which button was clicked*/
 function saveQualities(finishClicked) {
@@ -154,18 +217,21 @@ function validateEmail(elementName, carouselSlide) {
                 alert("Valid email format must be used");
                 document.forms["myForm"][elementName].style.borderColor = "red";
                 document.forms["myForm"][elementName].select();
+                $("#wizard_pages").carousel(carouselSlide);
                 return false;
             }
         } else {
             alert("Valid email format must be used");
             document.forms["myForm"][elementName].style.borderColor = "red";
             document.forms["myForm"][elementName].select();
+            $("#wizard_pages").carousel(carouselSlide);
             return false;
         }
     } else {
         alert("Valid email format must be used");
         document.forms["myForm"][elementName].style.borderColor = "red";
         document.forms["myForm"][elementName].select();
+        $("#wizard_pages").carousel(carouselSlide);
         return false;
     }
 }
@@ -193,5 +259,156 @@ function displayCheckedDrop() {
 
 }
 
+
+
+// jquery for hover of qualities
+
+$("input[class=checkboxOption]").hover(hoverAttributeOn, hoverAttributeOff);
+
+function hoverAttributeOn ()    {
+    // Change the description to visible
+    var attrib = $(this).attr('id');
+    var attribLongID = attrib + "Long";
+    var item = document.getElementById(attribLongID);
+    item.style.display = "block";
+}
+
+function hoverAttributeOff ()    {
+    // Change the description to visible
+    if ($(this).is(':checked')) {
+
+    } else {
+        var attrib = $(this).attr('id');
+        var attribLongID = attrib + "Long";
+        var item = document.getElementById(attribLongID);
+        item.style.display = "none";
+    }
+}
+
+
+
 displayCheckedDrop();
 $("input[type=checkbox]").on("click", displayCheckedDrop);
+
+//Limit characters typed into field.
+//At a later date, all of these functions should probably pop up explanations of what characters are and aren't allowed in their fields.
+//Currently this also allows users to paste non-allowed characters into fields, but not to type them.
+
+// limit to letters is for small text input fields. Do not use this for text box areas, as extra characters may be desired.
+function limitToLetters(e){
+  var charCode = e.which;
+  if (
+    (charCode >= 65 && charCode <= 90) || //lowercase
+    (charCode >= 97 && charCode <= 122) ||//uppercase
+    (charCode == 32 || charCode == 39 || charCode == 45) || // space ' and -
+    (charCode == 0 || charCode == 8) || //delete and backspace
+    ((charCode >= 128 && charCode <= 154) || (charCode >= 160 && charCode <= 165)) // accents
+  ){
+      return;
+  } else {
+    e.preventDefault();
+  }
+}
+
+// limitToNumbers is for simple number inputs, such as ages.
+function limitToNumbers(e){
+  var charCode = e.which;
+  if ((charCode >= 48 && charCode <= 57) || //numbers
+  (charCode == 0 || charCode == 8))//delete and backspace
+  {
+    return;
+  } else {
+    e.preventDefault();
+  }
+}
+
+// limitToLettersAndNumbers is a function for small text inputs where we cannot be certain of the range of inputs, but still limits characters such as brackets and quotation marks.
+function limitToLettersAndNumbers(e){
+  var charCode = e.which;
+  if (
+    (charCode >= 65 && charCode <= 90) || //lowercase
+    (charCode >= 97 && charCode <= 122) ||//uppercase
+    (charCode >= 48 && charCode <= 57) || //numbers
+    (charCode == 32 || charCode == 39 || charCode == 45) || // space ' and -
+    (charCode == 44 || charCode == 46) || // , and .
+    (charCode == 0 || charCode == 8) || //delete and backspace
+    ((charCode >= 128 && charCode <= 154) || (charCode >= 160 && charCode <= 165)) // accents
+  ){
+      return;
+  } else {
+    e.preventDefault();
+  }
+}
+
+// limitToPhoneNumbers is for input fields for phone numbers.
+function limitToPhoneNumbers(e){
+  var charCode = e.which;
+  console.log(charCode + " " +e);
+  var ctrl = e.ctrlKey ? e.ctrlKey : ((charCode === 17) ? true : false);
+
+  if ((charCode >= 48 && charCode <= 57) || //numbers
+  (charCode == 0 || charCode == 8) ||//delete and backspace
+  (charCode == 32 || charCode == 40 || charCode == 41 || charCode == 43 || charCode == 45) || //space, (, ), +, and -
+  (charCode == 69 || charCode == 84 || charCode == 88 || charCode == 101 || charCode == 116 || charCode == 120) ||//EXT, and ext
+  (charCode == 35 || charCode == 46) || //# and .
+  ((charCode == 118 || charCode == 99 || charCode == 120) && ctrl)
+  ){
+    return;
+  } else {
+    e.preventDefault();
+  }
+}
+
+function limitToEmails(e){
+  // limitToEmails is for email input fields. Will work for most/all modern email addresses. May need revision if other characters arise.
+  var charCode = e.which;
+  if (
+    (charCode >= 65 && charCode <= 90) || //lowercase
+    (charCode >= 97 && charCode <= 122) ||//uppercase
+    (charCode >= 48 && charCode <= 57) || //numbers
+    (charCode == 45 || charCode == 46 || charCode == 64 || charCode == 95) || // - . @ and _
+    (charCode == 0 || charCode == 8) //delete and backspace
+  ){
+      return;
+  } else {
+    e.preventDefault();
+  }
+}
+
+function limitForTextAreas(e){
+  var charCode = e.which;
+  if (
+    (charCode >= 32 && charCode <= 59) || charCode == 61 || (charCode >= 63 && charCode <= 154) || (charCode >= 160 && charCode <= 165) || // check for most typeable characters, other than < and > - this seeks to prevent injection attacks.
+    (charCode == 0 || charCode == 8 || charCode == 13) //delete, backspace, and enter
+  ){
+      return;
+  } else {
+    e.preventDefault();
+  }
+}
+
+//Function to remove spaces from start and end of input strings
+function removeSpaces(string){
+
+    var resultString = "";
+
+    resultString = string.trim();
+
+    return resultString;
+
+}
+
+
+//Listeners for character prohibitors.
+document.querySelector('input[name="firstName"]').onkeypress = function(e) {limitToLetters(e);}
+document.querySelector('input[name="lastName"]').onkeypress = function(e) {limitToLetters(e);}
+document.querySelector('input[name="age"]').onkeypress = function(e) {limitToNumbers(e);}
+document.querySelector('#language').onkeypress = function(e) {limitToLetters(e);}
+document.querySelector('input[name="school"]').onkeypress = function(e) {limitToLettersAndNumbers(e);}
+document.querySelector('input[name="age"]').onkeypress = function(e) {limitToNumbers(e);}
+document.querySelector('input[name="phoneNum"]').onkeypress = function(e) {limitToPhoneNumbers(e);}
+document.querySelector('input[name="mail"]').onkeypress = function(e) {limitToEmails(e);}
+document.querySelector('input[name="suburb"]').onkeypress = function(e) {limitToLetters(e);}
+document.querySelector('input[name="city"]').onkeypress = function(e) {limitToLetters(e);}
+
+document.querySelector('#personal_statement_text_field').onkeypress = function(e) {limitForTextAreas(e);}

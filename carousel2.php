@@ -11,7 +11,7 @@
                 <p><?php echo $tooltips_json['statement']; ?></p>
             </div>
             <div class="form_line_div">
-                <textarea class="form_element_middle" id="personal_statement_text_field" name="statement" rows="10" cols="50" placeholder="<?php echo $examples_json['statement'] ?>"><?php echo $statement; ?></textarea>
+                <textarea class="form_element_middle" id="personal_statement_text_field" name="statement" maxlength="500" rows="10" cols="50" placeholder="<?php echo $examples_json['statement'] ?>"><?php echo $statement; ?></textarea>
             </div>
         </div>
         <div class="carousel_bottom_nav_bar">

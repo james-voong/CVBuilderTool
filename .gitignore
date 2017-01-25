@@ -1,0 +1,18 @@
+# ignore DS_Store files from macOS
+.DS_Store
+
+# ignore idea files from PhpStorm
+.idea
+
+# ignore idea files from IntelliJ
+test/.idea
+test/out
+test/test.iml
+
+# ignore eclipse project files
+test/bin
+test/.classpath
+test/.project
+test/.settings
+
+.directory

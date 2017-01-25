@@ -20,7 +20,7 @@
                         echo '<div class="form_line_div"><label class="form_element_left">Year:</label>';
                         echo addYearPicker('awards['.$achievementsTracker.'][awardYear]', $achievementObj['awardYear'], $tooltips_json['awardYear']);
                         echo '</div>';
-                        echo '<div class="form_line_div"><label class="form_element_left">Award</label><textarea class="form_element_middle" name="awards[' . $achievementsTracker . '][award]" rows="4" cols="50" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['award'] . '" placeholder="' . $examples_json['award'] .'" >' . $achievementObj['award'] . '</textarea></div><br></div>';
+                        echo '<div class="form_line_div"><label class="form_element_left">Award</label><textarea class="form_element_middle" onkeypress="limitForTextAreas(event)" name="awards[' . $achievementsTracker . '][award]" rows="4" cols="50" maxlength="250" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['award'] . '" placeholder="' . $examples_json['award'] .'" >' . $achievementObj['award'] . '</textarea></div><br></div>';
                         ++$achievementsTracker;
                     }
                     --$achievementsTracker;
@@ -30,15 +30,22 @@
                     echo '<div class="form_line_div"><label class="form_element_left">Year:</label>';
                     echo addYearPicker('awards['.$achievementsTracker.'][awardYear]', '', $tooltips_json['awardYear']);
                     echo '</div>';
-                    echo '<div class="form_line_div"><label class="form_element_left">Award</label><textarea class="form_element_middle" name="awards[' . $achievementsTracker . '][award]" rows="4" cols="50" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['award'] . '" placeholder="' . $examples_json['award'] .'" ></textarea></div><br></div>';
+                    echo '<div class="form_line_div"><label class="form_element_left">Award</label><textarea class="form_element_middle" onkeypress="limitForTextAreas(event)" name="awards[' . $achievementsTracker . '][award]" rows="4" cols="50" maxlength="250" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['award'] . '" placeholder="' . $examples_json['award'] .'" ></textarea></div><br></div>';
               }
 
                 echo '<script>var achievementsTracker = ' . $achievementsTracker . ';</script>'; //variable for javascript
                 ?>
             </div>
             <div class="form_line_div">
-                <input type="button" id="more_fields_achievements" onclick="addAchievements();" value="Add Another Entry"/>
-                <input type="button" id="remove_fields_achievements" onclick="removeAchievements();" value="Remove Last Entry"/>
+                <input type="button" class="add_or_remove_fields_button" id="more_fields_achievements" onclick="addAchievements();" value="Add Another Entry"/>
+                <!-- Load the remove button as hidden if achievements tracker is zero as this means there is only one entry -->
+                <?php
+                if ($achievementsTracker == 0)    {
+                    echo '<input type="button" class="add_or_remove_fields_button" id="remove_fields_achievements" onclick="removeAchievements();" value="Remove Last Entry" hidden/>';
+                } else {
+                    echo '<input type="button" class="add_or_remove_fields_button" id="remove_fields_achievements" onclick="removeAchievements();" value="Remove Last Entry"/>';
+                }
+                ?>
             </div>
 
             <div class="form_line_div">
@@ -60,7 +67,7 @@
                         echo '<div class="form_line_div"><label class="form_element_left">Year:</label>';
                         echo addYearPicker('extracur['.$extracurricularTracker.'][extracurYear]', $extracurObj['extracurYear'], $tooltips_json['extracurYear']);
                         echo '</div>';
-                        echo '<div class="form_line_div"><label class="form_element_left">Activity</label><textarea class="form_element_middle" name="extracur[' . $extracurricularTracker . '][activity]" rows="4" cols="50" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['activity'] . '" placeholder="' . $examples_json['extraCurrActivity'] .'">' . $extracurObj['activity'] . '</textarea></div><br></div>';
+                        echo '<div class="form_line_div"><label class="form_element_left">Activity</label><textarea class="form_element_middle" onkeypress="limitForTextAreas(event)" name="extracur[' . $extracurricularTracker . '][activity]" rows="4" cols="50" maxlength="250" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['activity'] . '" placeholder="' . $examples_json['extraCurrActivity'] .'">' . $extracurObj['activity'] . '</textarea></div><br></div>';
                         //echo '<div class="form_line_div"><label class="form_element_left">Activity</label><input class="form_element_middle" name="extracur[' . $extracurricularTracker . '][activity]" type="text" value="' . $extracurObj['activity'] .'" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['activity'] . '"/></div><br></div>';
                         ++$extracurricularTracker;
                     }
@@ -71,7 +78,7 @@
                     echo '<div class="form_line_div"><label class="form_element_left">Year:</label>';
                     echo addYearPicker('extracur['.$extracurricularTracker.'][extracurYear]', '', $tooltips_json['extracurYear']);
                     echo '</div>';
-                    echo '<div class="form_line_div"><label class="form_element_left">Activity</label><textarea class="form_element_middle" name="extracur[' . $extracurricularTracker . '][activity]" rows="4" cols="50" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['activity'] . '" placeholder="' . $examples_json['extraCurrActivity'] .'"></textarea></div><br></div>';
+                    echo '<div class="form_line_div"><label class="form_element_left">Activity</label><textarea class="form_element_middle" onkeypress="limitForTextAreas(event)" name="extracur[' . $extracurricularTracker . '][activity]" rows="4" cols="50" maxlength="250" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['activity'] . '" placeholder="' . $examples_json['extraCurrActivity'] .'"></textarea></div><br></div>';
                     //echo '<div class="form_line_div"><label class="form_element_left">Activity</label><input class="form_element_middle" name="extracur[' . $extracurricularTracker . '][activity]" type="text" value="" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['activity'] . '"/></div><br></div>';
                 }
 
@@ -80,8 +87,15 @@
                 ?>
             </div>
             <div class="form_line_div">
-                <input type="button" id="more_fields_extracurricular" onclick="addExtracurricular();" value="Add Another Entry"/>
-                <input type="button" id="remove_fields_extracurricular" onclick="removeExtracurricular();" value="Remove Last Entry"/>
+                <input type="button" class="add_or_remove_fields_button" id="more_fields_extracurricular" onclick="addExtracurricular();" value="Add Another Entry"/>
+                <!-- Load the remove button as hidden if extracurricular tracker is zero as this means there is only one entry -->
+                <?php
+                if ($extracurricularTracker == 0)    {
+                    echo '<input type="button" class="add_or_remove_fields_button" id="remove_fields_extracurricular" onclick="removeExtracurricular();" value="Remove Last Entry" hidden/>';
+                } else {
+                    echo '<input type="button" class="add_or_remove_fields_button" id="remove_fields_extracurricular" onclick="removeExtracurricular();" value="Remove Last Entry"/>';
+                }
+                ?>
             </div>
         </div>
         <div class="carousel_bottom_nav_bar">

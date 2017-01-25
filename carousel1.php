@@ -11,17 +11,17 @@
             </div>
             <div class="form_line_div">
                 <label class="form_element_left" id="req">First Name:</label>
-                <input class="form_element_middle" name="firstName" type="text" value="<?php echo $firstName; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['firstName']; ?>" placeholder="<?php echo $examples_json['firstName'] ?>"/>
+                <input class="form_element_middle" name="firstName" type="text" maxlength="25" value="<?php echo $firstName; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['firstName']; ?>" placeholder="<?php echo $examples_json['firstName'] ?>"/>
             </div>
 
             <div class="form_line_div">
                 <label class="form_element_left" id="req">Last Name:</label>
-                <input class="form_element_middle" name="lastName" type="text" value="<?php echo $lastName; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['lastName']; ?>" placeholder="<?php echo $examples_json['lastName'] ?>"/>
+                <input class="form_element_middle" name="lastName" type="text" maxlength="25" value="<?php echo $lastName; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['lastName']; ?>" placeholder="<?php echo $examples_json['lastName'] ?>"/>
             </div>
 
             <div class="form_line_div">
                 <label class="form_element_left">Age:</label>
-                <input class="form_element_middle" name="age" type="text" value="<?php echo $age; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['age']; ?>"
+                <input class="form_element_middle" name="age" type="text" maxlength="2" value="<?php echo $age; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['age']; ?>"
                 placeholder="<?php echo $examples_json['age'] ?>"/>
             </div>
 
@@ -35,14 +35,14 @@
                     if ($languageTracker == 0) {
                         echo '<div class="form_line_div" id="language_0">';
                         echo '<label class="form_element_left">Languages:</label>';
-                        echo '<input id="language" class="form_element_middle" name="languages[0][language]" type="text" value="' . $languageObj['language'] . '" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['languages'] . '" placeholder="' . $examples_json['languages'] .'"/>';
+                        echo '<input id="language" class="form_element_middle" onkeypress="limitToLetters(event)" name="languages[0][language]" type="text" maxlength="25" value="'.$languageObj['language'].'" data-toggle="tooltip" data-placement="right" title="'.$tooltips_json['languages'].'" placeholder="'.$examples_json['languages'].'"/>';
                         echo '<input class="addOrRemoveButton" id="addLanguageButton" type="button" value="+" onclick="addLanguage();"/>'; //add the + button next to the first language
                         echo '</div>';
                     } else {
                         //loading more languages field without the + button
                         echo '<div class="form_line_div" id="language_'.$languageTracker.'">';
                         echo '<label class="form_element_left"></label>';
-                        echo '<input id="language" class="form_element_middle" name="languages[' . $languageTracker . '][language]" type="text" value="' . $languageObj['language'] . '" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['languages'] . '" placeholder="'. $examples_json['languages'] .'"/>';
+                        echo '<input id="language" class="form_element_middle" onkeypress="limitToLetters(event)" name="languages['.$languageTracker.'][language]" type="text" maxlength="25" value="'.$languageObj['language'].'" data-toggle="tooltip" data-placement="right" title="'.$tooltips_json['languages'].'" placeholder="'.$examples_json['languages'].'"/>';
                         if ($languageTracker == count($user_json['languages']) - 1) {
                             echo '<div id="removeLanguageButton"><input class="addOrRemoveButton" type="button" value="-" onclick="removeLanguage();"/></div>';
                         }
@@ -54,17 +54,17 @@
             } else {
                 echo '<div class="form_line_div" id="language_0">';
                 echo '<label class="form_element_left">Languages:</label>';
-                echo ' <input id="language" class="form_element_middle" name="languages[0][language]" type="text" value="" data-toggle="tooltip" data-placement="right" title="' . $tooltips_json['languages'] . '" placeholder="'. $examples_json['languages'] .'" />';
+                echo ' <input id="language" class="form_element_middle" onkeypress="limitToLetters(event)" name="languages[0][language]" type="text" maxlength="25" value="" data-toggle="tooltip" data-placement="right" title="'.$tooltips_json['languages'].'" placeholder="'.$examples_json['languages'].'" />';
                 echo '<input class="addOrRemoveButton" id="addLanguageButton" type="button" value="+" onclick="addLanguage();"/>';
                 echo '</div>';
             }
 
-            echo '<script>var languageTracker = ' . $languageTracker . ';</script>'; //adding the languageTracker variable for javacript
+            echo '<script>var languageTracker = '.$languageTracker.';</script>'; //adding the languageTracker variable for javacript
             ?>
 
             <div class="form_line_div">
                 <label class="form_element_left" id="req">School:</label>
-                <input class="form_element_middle" name="school" type="text" value="<?php echo $school; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['school']; ?>" placeholder="<?php echo $examples_json['school'] ?>"/><br>
+                <input class="form_element_middle" name="school" type="text" maxlength="35" value="<?php echo $school; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['school']; ?>" placeholder="<?php echo $examples_json['school'] ?>"/><br>
             </div>
 
             <div class="form_line_div">
@@ -74,7 +74,7 @@
 
                 <!--This is the drop down for the license held part. Remove the old input part and paste in this after the label-->
                 <select class="form_element_middle" id="license_drop_down" name="license" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['license']; ?>">
-                    <option name='license' value="No license" selected="selected">No license</option>
+                    <option name='license' value="No License" selected="selected">No License</option>
                     <option name='license' value="Learner's License" <?php if ($license == 'Learner\'s License') {
                 echo 'selected="selected"';
             } ?>>Learner's License</option>
@@ -89,22 +89,22 @@
 
             <div class="form_line_div">
                 <label class="form_element_left" id="req">Phone Number:</label>
-                <input class="form_element_middle" name="phoneNum" type="text" value="<?php echo $phoneNum; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['phoneNum']; ?>" placeholder="<?php echo $examples_json['phoneNum'] ?>"/>
+                <input class="form_element_middle" name="phoneNum" type="text" maxlength="25" value="<?php echo $phoneNum; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['phoneNum']; ?>" placeholder="<?php echo $examples_json['phoneNum'] ?>"/>
             </div>
 
             <div class="form_line_div">
                 <label class="form_element_left" id="req">Email:</label>
-                <input class="form_element_middle" name="mail" type="text" value="<?php echo $mail; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['mail']; ?>" placeholder="<?php echo $examples_json['email'] ?>"/>
+                <input class="form_element_middle" name="mail" type="text" maxlength="50" value="<?php echo $mail; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['mail']; ?>" placeholder="<?php echo $examples_json['email'] ?>"/>
             </div>
 
             <div class="form_line_div">
                 <label class="form_element_left">Suburb:</label>
-                <input class="form_element_middle" name="suburb" type="text" value="<?php echo $suburb; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['suburb']; ?>" placeholder="<?php echo $examples_json['suburb'] ?>"/>
+                <input class="form_element_middle" name="suburb" type="text" maxlength="25" value="<?php echo $suburb; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['suburb']; ?>" placeholder="<?php echo $examples_json['suburb'] ?>"/>
             </div>
 
             <div class="form_line_div">
                 <label class="form_element_left" id="req">City:</label>
-                <input class="form_element_middle" name="city" type="text" value="<?php echo $city; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['city']; ?>" placeholder="<?php echo $examples_json['city'] ?>"/>
+                <input class="form_element_middle" name="city" type="text" maxlength="25" value="<?php echo $city; ?>" data-toggle="tooltip" data-placement="right" title="<?php echo $tooltips_json['city']; ?>" placeholder="<?php echo $examples_json['city'] ?>"/>
             </div>
 
             <div class="form_line_div">

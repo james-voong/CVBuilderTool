@@ -9,7 +9,7 @@
                 // This variable tracks the number of education years on the education screen of the carousel
                 $educationTracker = 0;
                 // This variable tracks the default number of subjects to show in each education section
-                $defaultEducationSubjects = 6;
+                $defaultEducationSubjects = 5;
                 // This variable is an array that stores the number of subjects in each education section
                 // i.e. if there are 5 subjects in the first education section (index 0) and 4 in the second (index 1)
                 // they would be stored like this: [5,4]
@@ -38,7 +38,7 @@
                 function loadSubjectLine($name, $tooltip, $selected = '', $example)
                 {
                     //loading subject field and auto populate if text is given
-                    echo '<input class="form_element_middle" name="'.$name.'" value="'.$selected.'" type="text" data-toggle="tooltip" data-placement="right" title="'.$tooltip.'" placeholder="' . $example . '"/>';
+                    echo '<input class="form_element_middle" onkeypress="limitToLetters(event)" name="'.$name.'" value="'.$selected.'" type="text" maxlength="40" data-toggle="tooltip" data-placement="right" title="'.$tooltip.'" placeholder="' . $example . '"/>';
                 }
 
                 //auto populate all education fields on loading of page
@@ -105,8 +105,15 @@
                 ?>
             </div>
             <div class="form_line_div">
-                <input type="button" id="more_fields_education" onclick="addEducation();" value="Add Another Year"/>
-                <input type="button" id="remove_fields_education" onclick="removeEducation();" value="Remove Last Year"/>
+                <input type="button" class="add_or_remove_fields_button" id="more_fields_education" onclick="addEducation();" value="Add Another Year"/>
+                <!-- Load the remove button as hidden if education tracker is zero as this means there is only one entry -->
+                <?php
+                if ($educationTracker == 0)    {
+                    echo '<input type="button" class="add_or_remove_fields_button" id="remove_fields_education" onclick="removeEducation();" value="Remove Last Year" hidden/>';
+                } else {
+                    echo '<input type="button" class="add_or_remove_fields_button" id="remove_fields_education" onclick="removeEducation();" value="Remove Last Year"/>';
+                }
+                ?>
             </div>
         </div>
         <div class="carousel_bottom_nav_bar">

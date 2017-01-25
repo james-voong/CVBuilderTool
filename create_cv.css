@@ -296,11 +296,6 @@ html {
     /*margin-right: 8%;*/
 }
 
-/*CSS for attributes page*/
-.attribute {
-    min-height: 18px;
-}
-
 /*CSS for making the text areas only be resizeable in the vertical direction*/
 
 textarea {
@@ -326,30 +321,74 @@ input:required {
 
 /*Carousel 6 CSS for attribute dropdowns */
 .attribLong {
-    display: none;
+    /*display: none;*/
     list-style-image: none;
 }
 
-
-
-/*Carousel 6 CSS for checkboxes*/
-
-/*input[type="checkbox"]{*/
-  /*width: 50px; Desired width*/
-  /*height: 50px; Desired height*/
-  /*cursor: pointer;*/
-  /*-webkit-appearance: none;*/
-  /*appearance: none;*/
-/*}*/
+/*CSS for attributes page*/
+.attribute {
+    /*min-height: 60%;*/
+    /*width: 200px;*/
+    /*background-color: red;*/
+}
 
 input[type="checkbox"] {
-  transform:scale(2, 2);
+  transform:scale(1.5, 1.5);
 }
 
 /*Carousel 6 CSS to move quality words over slightly*/
 #quality_text {
     padding-left: 20px;
     /*padding-bottom: -5px;*/
+}
+
+
+
+.attribute p {
+    font-weight: bold;
+    /*font-size: 20pt;*/
+    padding: 0;
+    margin: 0;
+}
+
+/*Carousel 6 CSS*/
+
+
+/*CSS code to make the div a flexbox*/
+#personal_attributes_container   {
+    display: flex;
+    flex-flow: row wrap;
+    /*align-items: stretch;*/
+}
+
+.personal_attribute  {
+    width: 25%;
+    height: 60px;
+    /*border: 2px solid black;*/
+    /*background-color: red;*/
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-start;
+    flex-flow: column nowrap;
+}
+
+.attribute_top  {
+    /*height: 10px;*/
+    width: 100%;
+    padding: 0px;
+
+} 
+
+.attribute_bottom   {  
+    /*height: 70px;    */
+    width: 100%;
+    /*min-height: 40px;     */
+    /*width: 200px; */
+    padding: 0 5px 0 0;
+}
+
+.attribute_bottom divs{
+    padding: 0px;
 }
 
 
@@ -362,4 +401,19 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 input[type="number"] {
     -moz-appearance: textfield;
+}
+
+
+/*CSS for add more and remove buttons on pages where they exist*/
+
+.add_or_remove_fields_button  {
+    color: white;
+    border-width: 1px;
+    border-color: white;
+    /*#64c864;*/
+    /*background-color: #64c864;*/
+    border-radius: 4px;
+    /*font-weight: bold;*/
+    /*border: none;*/
+    background-color: black;
 }
