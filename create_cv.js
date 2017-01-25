@@ -1,30 +1,15 @@
-// Initialize Bootstrap functionality
-
 // Initialize tooltip component
 
-function initialise_tool_tip () {
+function initialise_tool_tip() {
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover();
 }
 
 initialise_tool_tip();
 
-// $(function()    {
-//     initilise_tool_tip();
-// });
-// $(function() {
-//     $('[data-toggle="tooltip"]').tooltip();
-//     // $('[data-toggle="popover"]').popover();
-// });
-
-// // Initialize popover component
-// $(function() {
-//     $('[data-toggle="popover"]').popover();
-// });
-
 // Remove arrows from first and last page
 
-$('#wizard_pages').on('slid.bs.carousel', '', function() {
+$('#wizard_pages').on('slid.bs.carousel', '', function () {
     var $this = $(this);
 
     $this.children('.carousel-control').show();
@@ -42,11 +27,11 @@ $('#wizard_pages').on('slid.bs.carousel', '', function() {
 
 // This function limits the number of personal attributes that can be selected
 var qualitiesIndex = 0;
-jQuery(function() {
+jQuery(function () {
     var max = 6;
     var checkboxes = jQuery('input[type="checkbox"]');
 
-    checkboxes.change(function() {
+    checkboxes.change(function () {
         var current = checkboxes.filter(':checked').length;
         checkboxes.filter(':not(:checked)').prop('disabled', current >= max);
 
@@ -54,7 +39,7 @@ jQuery(function() {
 });
 
 
-jQuery(function() {
+jQuery(function () {
     var max = 6;
     var checkboxes = jQuery('input[type="checkbox"]');
 
@@ -195,7 +180,7 @@ function validateItemDatePicker(companyName, startDateName, carouselSlide) {
 function saveQualities(finishClicked) {
     runValidation = finishClicked;
 
-    $("input:checkbox[name=quality]:checked").each(function() {
+    $("input:checkbox[name=quality]:checked").each(function () {
         qualitiesChecked++;
         $(this).attr('name', 'qualities[' + qualitiesIndex + '][quality]');
         qualitiesIndex++;
@@ -237,35 +222,34 @@ function validateEmail(elementName, carouselSlide) {
 }
 
 
-
 //Tooltips dropping down beneath selected characteristics
-function displayCheckedDrop() {
-    var m = $("input[class=checkboxOption]").length;
+/*
+ function displayCheckedDrop() {
+ var m = $("input[class=checkboxOption]").length;
 
-    for (i = 0; i < m; i++) {
-        var attrib = $("input[class=checkboxOption]")[i];
-        var attribLongID = attrib.id + "Long";
-        var item = document.getElementById(attribLongID);
-        item.style.display = "none";
-    }
+ for (i = 0; i < m; i++) {
+ var attrib = $("input[class=checkboxOption]")[i];
+ var attribLongID = attrib.id + "Long";
+ var item = document.getElementById(attribLongID);
+ item.style.display = "none";
+ }
 
-    var n = $("input:checked").length;
-    for (i = 0; i < n; i++) {
-        var attrib = $("input:checked")[i];
-        var attribLongID = attrib.id + "Long";
-        var item = document.getElementById(attribLongID);
-        item.style.display = "block";
-    }
+ var n = $("input:checked").length;
+ for (i = 0; i < n; i++) {
+ var attrib = $("input:checked")[i];
+ var attribLongID = attrib.id + "Long";
+ var item = document.getElementById(attribLongID);
+ item.style.display = "block";
+ }
 
-}
+ }
+ */
 
-
-
-// jquery for hover of qualities
+// jquery for hover of qualities --> this code is legacy now with the new panel based personal attributes page
 
 $("input[class=checkboxOption]").hover(hoverAttributeOn, hoverAttributeOff);
 
-function hoverAttributeOn ()    {
+function hoverAttributeOn() {
     // Change the description to visible
     var attrib = $(this).attr('id');
     var attribLongID = attrib + "Long";
@@ -273,7 +257,7 @@ function hoverAttributeOn ()    {
     item.style.display = "block";
 }
 
-function hoverAttributeOff ()    {
+function hoverAttributeOff() {
     // Change the description to visible
     if ($(this).is(':checked')) {
 
@@ -285,106 +269,143 @@ function hoverAttributeOff ()    {
     }
 }
 
+// Jquery for changing color when clicked
 
+function changeColor() {
+    var attrib = $(this).attr('id');
+    var checkboxId = attrib.replace("box", "checkbox");
+    if (qualitiesTracker < 6 && !document.getElementById(checkboxId).checked) {
+        $(this).toggleClass('color_toggled_on');
+        $("#" + checkboxId).attr("checked", "checked");
+        qualitiesTracker++;
+        toggleUncheckedBoxGrey();
+    } else if (qualitiesTracker <= 6 && document.getElementById(checkboxId).checked) {
+        toggleUncheckedBoxGrey();
+        $(this).toggleClass('color_toggled_on');
+        $("#" + checkboxId).removeAttr("checked");
+        qualitiesTracker--;
+    }
+    console.log(qualitiesTracker);
+}
 
-displayCheckedDrop();
-$("input[type=checkbox]").on("click", displayCheckedDrop);
+function toggleUncheckedBoxGrey() {
+    if (qualitiesTracker == 6) {
+        var qualities = document.getElementsByClassName("personal_attribute");
+        for (var i = 0; i < qualities.length; i++) {
+            var attrib = $(qualities[i]).attr('id');
+            var checkboxId = attrib.replace("box", "checkbox");
+            if (!document.getElementById(checkboxId).checked) {
+                console.log(checkboxId + " " + document.getElementById(checkboxId).checked);
+                $(qualities[i]).toggleClass('color_toggled_grey');
+            }
+        }
+    }
+}
+
+function updateLoadQualities() {
+    var qualities = document.getElementsByClassName("personal_attribute");
+    for (var i = 0; i < qualities.length; i++) {
+        if ($(qualities[i]).hasClass("color_toggled_on")) {
+            var checkboxId = attrib.replace($(qualities[i]).attr("id"), "checkbox");
+            $("#" + checkboxId).attr("checked", "checked"); //make hidden checkbox checked
+        }
+    }
+}
+
+$(".personal_attribute").on("click", changeColor);
 
 //Limit characters typed into field.
 //At a later date, all of these functions should probably pop up explanations of what characters are and aren't allowed in their fields.
 //Currently this also allows users to paste non-allowed characters into fields, but not to type them.
 
 // limit to letters is for small text input fields. Do not use this for text box areas, as extra characters may be desired.
-function limitToLetters(e){
-  var charCode = e.which;
-  if (
-    (charCode >= 65 && charCode <= 90) || //lowercase
-    (charCode >= 97 && charCode <= 122) ||//uppercase
-    (charCode == 32 || charCode == 39 || charCode == 45) || // space ' and -
-    (charCode == 0 || charCode == 8) || //delete and backspace
-    ((charCode >= 128 && charCode <= 154) || (charCode >= 160 && charCode <= 165)) // accents
-  ){
-      return;
-  } else {
-    e.preventDefault();
-  }
+function limitToLetters(e) {
+    var charCode = e.which;
+    if (
+        (charCode >= 65 && charCode <= 90) || //lowercase
+        (charCode >= 97 && charCode <= 122) ||//uppercase
+        (charCode == 32 || charCode == 39 || charCode == 45) || // space ' and -
+        (charCode == 0 || charCode == 8) || //delete and backspace
+        ((charCode >= 128 && charCode <= 154) || (charCode >= 160 && charCode <= 165)) // accents
+    ) {
+        return;
+    } else {
+        e.preventDefault();
+    }
 }
 
 // limitToNumbers is for simple number inputs, such as ages.
-function limitToNumbers(e){
-  var charCode = e.which;
-  if ((charCode >= 48 && charCode <= 57) || //numbers
-  (charCode == 0 || charCode == 8))//delete and backspace
-  {
-    return;
-  } else {
-    e.preventDefault();
-  }
+function limitToNumbers(e) {
+    var charCode = e.which;
+    if ((charCode >= 48 && charCode <= 57) || //numbers
+        (charCode == 0 || charCode == 8))//delete and backspace
+    {
+        return;
+    } else {
+        e.preventDefault();
+    }
 }
 
 // limitToLettersAndNumbers is a function for small text inputs where we cannot be certain of the range of inputs, but still limits characters such as brackets and quotation marks.
-function limitToLettersAndNumbers(e){
-  var charCode = e.which;
-  if (
-    (charCode >= 65 && charCode <= 90) || //lowercase
-    (charCode >= 97 && charCode <= 122) ||//uppercase
-    (charCode >= 48 && charCode <= 57) || //numbers
-    (charCode == 32 || charCode == 39 || charCode == 45) || // space ' and -
-    (charCode == 44 || charCode == 46) || // , and .
-    (charCode == 0 || charCode == 8) || //delete and backspace
-    ((charCode >= 128 && charCode <= 154) || (charCode >= 160 && charCode <= 165)) // accents
-  ){
-      return;
-  } else {
-    e.preventDefault();
-  }
+function limitToLettersAndNumbers(e) {
+    var charCode = e.which;
+    if (
+        (charCode >= 65 && charCode <= 90) || //lowercase
+        (charCode >= 97 && charCode <= 122) ||//uppercase
+        (charCode >= 48 && charCode <= 57) || //numbers
+        (charCode == 32 || charCode == 39 || charCode == 45) || // space ' and -
+        (charCode == 44 || charCode == 46) || // , and .
+        (charCode == 0 || charCode == 8) || //delete and backspace
+        ((charCode >= 128 && charCode <= 154) || (charCode >= 160 && charCode <= 165)) // accents
+    ) {
+        return;
+    } else {
+        e.preventDefault();
+    }
 }
 
 // limitToPhoneNumbers is for input fields for phone numbers.
-function limitToPhoneNumbers(e){
-  var charCode = e.which;
-  console.log(charCode + " " +e);
-  var ctrl = e.ctrlKey ? e.ctrlKey : ((charCode === 17) ? true : false);
 
-  if ((charCode >= 48 && charCode <= 57) || //numbers
-  (charCode == 0 || charCode == 8) ||//delete and backspace
-  (charCode == 32 || charCode == 40 || charCode == 41 || charCode == 43 || charCode == 45) || //space, (, ), +, and -
-  (charCode == 69 || charCode == 84 || charCode == 88 || charCode == 101 || charCode == 116 || charCode == 120) ||//EXT, and ext
-  (charCode == 35 || charCode == 46) || //# and .
-  ((charCode == 118 || charCode == 99 || charCode == 120) && ctrl)
-  ){
-    return;
-  } else {
-    e.preventDefault();
-  }
+function limitToPhoneNumbers(e) {
+    var charCode = e.which;
+    if ((charCode >= 48 && charCode <= 57) || //numbers
+        (charCode == 0 || charCode == 8) ||//delete and backspace
+        (charCode == 32 || charCode == 40 || charCode == 41 || charCode == 43 || charCode == 45) || //space, (, ), +, and -
+        (charCode == 69 || charCode == 84 || charCode == 88 || charCode == 101 || charCode == 116 || charCode == 120) ||//EXT, and ext
+        (charCode == 35 || charCode == 46)) //# and .
+    {
+        return;
+    } else {
+        e.preventDefault();
+    }
 }
 
-function limitToEmails(e){
-  // limitToEmails is for email input fields. Will work for most/all modern email addresses. May need revision if other characters arise.
-  var charCode = e.which;
-  if (
-    (charCode >= 65 && charCode <= 90) || //lowercase
-    (charCode >= 97 && charCode <= 122) ||//uppercase
-    (charCode >= 48 && charCode <= 57) || //numbers
-    (charCode == 45 || charCode == 46 || charCode == 64 || charCode == 95) || // - . @ and _
-    (charCode == 0 || charCode == 8) //delete and backspace
-  ){
-      return;
-  } else {
-    e.preventDefault();
-  }
+function limitToEmails(e) {
+    // limitToEmails is for email input fields. Will work for most/all modern email addresses. May need revision if other characters arise.
+    var charCode = e.which;
+    if (
+        (charCode >= 65 && charCode <= 90) || //lowercase
+        (charCode >= 97 && charCode <= 122) ||//uppercase
+        (charCode >= 48 && charCode <= 57) || //numbers
+        (charCode == 45 || charCode == 46 || charCode == 64 || charCode == 95) || // - . @ and _
+        (charCode == 0 || charCode == 8) //delete and backspace
+    ) {
+        return;
+    } else {
+        e.preventDefault();
+    }
 }
 
-function limitForTextAreas(e){
-  var charCode = e.which;
-  if (
-    (charCode >= 32 && charCode <= 59) || charCode == 61 || (charCode >= 63 && charCode <= 154) || (charCode >= 160 && charCode <= 165) || // check for most typeable characters, other than < and > - this seeks to prevent injection attacks.
-    (charCode == 0 || charCode == 8 || charCode == 13) //delete, backspace, and enter
-  ){
-      return;
-  } else {
-    e.preventDefault();
-  }
+function limitForTextAreas(e) {
+    var charCode = e.which;
+    if (
+        (charCode >= 32 && charCode <= 59) || charCode == 61 || (charCode >= 63 && charCode <= 154) || (charCode >= 160 && charCode <= 165) || // check for most typeable characters, other than < and > - this seeks to prevent injection attacks.
+        (charCode == 0 || charCode == 8 || charCode == 13) //delete, backspace, and enter
+    ) {
+        return;
+    } else {
+        e.preventDefault();
+    }
 }
 
 //Function to remove spaces from start and end of input strings
@@ -400,15 +421,38 @@ function removeSpaces(string){
 
 
 //Listeners for character prohibitors.
-document.querySelector('input[name="firstName"]').onkeypress = function(e) {limitToLetters(e);}
-document.querySelector('input[name="lastName"]').onkeypress = function(e) {limitToLetters(e);}
-document.querySelector('input[name="age"]').onkeypress = function(e) {limitToNumbers(e);}
-document.querySelector('#language').onkeypress = function(e) {limitToLetters(e);}
-document.querySelector('input[name="school"]').onkeypress = function(e) {limitToLettersAndNumbers(e);}
-document.querySelector('input[name="age"]').onkeypress = function(e) {limitToNumbers(e);}
-document.querySelector('input[name="phoneNum"]').onkeypress = function(e) {limitToPhoneNumbers(e);}
-document.querySelector('input[name="mail"]').onkeypress = function(e) {limitToEmails(e);}
-document.querySelector('input[name="suburb"]').onkeypress = function(e) {limitToLetters(e);}
-document.querySelector('input[name="city"]').onkeypress = function(e) {limitToLetters(e);}
 
-document.querySelector('#personal_statement_text_field').onkeypress = function(e) {limitForTextAreas(e);}
+document.querySelector('input[name="firstName"]').onkeypress = function (e) {
+    limitToLetters(e);
+}
+document.querySelector('input[name="lastName"]').onkeypress = function (e) {
+    limitToLetters(e);
+}
+document.querySelector('input[name="age"]').onkeypress = function (e) {
+    limitToNumbers(e);
+}
+document.querySelector('#language').onkeypress = function (e) {
+    limitToLetters(e);
+}
+document.querySelector('input[name="school"]').onkeypress = function (e) {
+    limitToLettersAndNumbers(e);
+}
+document.querySelector('input[name="age"]').onkeypress = function (e) {
+    limitToNumbers(e);
+}
+document.querySelector('input[name="phoneNum"]').onkeypress = function (e) {
+    limitToPhoneNumbers(e);
+}
+document.querySelector('input[name="mail"]').onkeypress = function (e) {
+    limitToEmails(e);
+}
+document.querySelector('input[name="suburb"]').onkeypress = function (e) {
+    limitToLetters(e);
+}
+document.querySelector('input[name="city"]').onkeypress = function (e) {
+    limitToLetters(e);
+}
+
+document.querySelector('#personal_statement_text_field').onkeypress = function (e) {
+    limitForTextAreas(e);
+}

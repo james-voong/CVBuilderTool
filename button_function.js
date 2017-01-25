@@ -25,11 +25,9 @@ function loadJSON(callback) {
 var example_text_json = {};
  $(document).ready(function () {
     $.getJSON('example.json', function (data) {
-        // console.log(data);
         example_text_json=data;
     });
 });
-
 
 // Javascript functions for carousel 1
 

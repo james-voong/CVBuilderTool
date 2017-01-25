@@ -22,6 +22,8 @@
                         }
                     }
                 }
+
+                return '';
             }
 
             ?>
@@ -29,19 +31,31 @@
 
             <div class="form_line_div" id="personal_attributes_container">
 
-                  <?php
+                <?php
 
-                  $qualitiesList = ['Accurate', 'Adaptable', 'Alert', 'Ambitious', 'Amiable', 'Analytical', 'Articulate', 'Assertive', 'Attentive', 'Broad-minded', 'Businesslike', 'Calm', 'Capable',
-                  'Careful', 'Competent', 'Confident', 'Conscientious', 'Consistent', 'Cooperative', 'Dedicated', 'Dependable', 'Determined', 'Efficient', 'Energetic', 'Enterprising', 'Flexible',
-                  'Hardworking', 'Honest', 'Independent', 'Industrious', 'Innovative', 'Motivated', 'Optimistic', 'Organized', 'Patient', 'People-oriented', 'Persevering', 'Practical', 'Productive',
-                  'Realistic', 'Reliable', 'Resourceful', 'Responsible', 'Versatile', ];
+                $qualitiesList = ['Accurate', 'Adaptable', 'Alert', 'Ambitious', 'Amiable', 'Analytical', 'Articulate', 'Assertive', 'Attentive', 'Broad-minded', 'Businesslike', 'Calm', 'Capable',
+                    'Careful', 'Competent', 'Confident', 'Conscientious', 'Consistent', 'Cooperative', 'Dedicated', 'Dependable', 'Determined', 'Efficient', 'Energetic', 'Enterprising', 'Flexible',
+                    'Hardworking', 'Honest', 'Independent', 'Industrious', 'Innovative', 'Motivated', 'Optimistic', 'Organized', 'Patient', 'People-oriented', 'Persevering', 'Practical', 'Productive',
+                    'Realistic', 'Reliable', 'Resourceful', 'Responsible', 'Versatile'];
+                $qualitiesTracker = 0;
+                foreach ($qualitiesList as $quality) {
+                    $checkedState = loadQualities($quality);
+                    if ($checkedState == '' && count($user_json['qualities']) == 6) {
+                        $toggledState = ' color_toggled_grey';
+                    } else if ($checkedState == '' && count($user_json['qualities']) < 6) {
+                        $toggledState = '';
+                    } else if ($checkedState == ' checked ') {
+                        $qualitiesTracker++;
+                        $toggledState = ' color_toggled_on';
+                    }
+                    echo '<div class="personal_attribute' . $toggledState . '" id="' . lcfirst($quality) . '_box"><div class="form_line_div attribute attribute_top"><p id="quality_text"></p><p class="quality_text_class" id="' . lcfirst($quality) . '">' . $quality . '</p></div>';
+                    echo '<div class="form_line_div attribute attribute_bottom"><div class="attribLong" id="' . lcfirst($quality) . 'Long">' . $tooltips_json[lcfirst($quality)] . '</div></div>';
+                    echo '<input type="checkbox" id="' . lcfirst($quality) . '_checkbox" name="quality"  value="' . $quality . '" style="display:none"' . $checkedState . '/>';
+                    echo '</div>';
+                }
 
-                  foreach ($qualitiesList as $quality) {
-                      echo '<div class="personal_attribute"><div class="form_line_div attribute attribute_top"><input class="checkboxOption" id="'.lcfirst($quality).'" type="checkbox" '.loadQualities($quality).' name="quality" value="'.$quality.'"/><p id="quality_text">'.$quality.'</p></div>';
-                      echo '<div class="form_line_div attribute attribute_bottom"><div class="attribLong" id="'.lcfirst($quality).'Long">'.$tooltips_json[lcfirst($quality)].'</div></div></div>';
-                  }
-
-                  ?>
+                echo '<script>qualitiesTracker = ' . $qualitiesTracker . ';</script>';
+                ?>
 
             </div>
         </div>

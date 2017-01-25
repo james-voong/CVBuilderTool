@@ -259,6 +259,7 @@ public class BrowserIntegrationTest {
         assertEquals(0, Integer.parseInt(driver.getJsVar("languageTracker"))); //javascript languageTracker should be 0
 
         driver.getDriver().findElement(By.id("slide1")).click(); //click away from the text box to remove tooltip
+        driver.waitFor(250);
         driver.clickButtonById("addLanguageButton"); //press + button to add 1 more language field
         assertEquals(1, Integer.parseInt(driver.getJsVar("languageTracker"))); //javascript languageTracker should be 1
         driver.typeFieldByName("languages[1][language]", "Spanish"); //type in field languages[1][language]
@@ -679,21 +680,24 @@ public class BrowserIntegrationTest {
         */
 
         for (String attributeName: attributeNames) {
-            driver.checkBoxClickById(attributeName); //check attribute versatile
-            assertTrue(driver.isBoxCheckedById(attributeName)); //versatile should be checked
-            driver.checkBoxClickById(attributeName); //uncheck attribute versatile
-            assertFalse(driver.isBoxCheckedById(attributeName)); //versatile should be unchecked
+            //driver.checkBoxClickById(attributeName); //check attribute
+            driver.getDriver().findElement(By.id(attributeName + "_box")).click();
+            assertTrue(driver.isBoxCheckedById(attributeName + "_checkbox")); //quality should be checked
+            driver.getDriver().findElement(By.id(attributeName + "_box")).click();
+            //driver.checkBoxClickById(attributeName); //uncheck attribute
+            assertFalse(driver.isBoxCheckedById(attributeName)); //quality should be unchecked
         }
 
         //check 6 qualities and make sure that all other qualities are disabled
         List<String> qualityList = new ArrayList<>(Arrays.asList("versatile", "responsible", "resourceful", "organized", "optimistic", "hardworking"));
         for (String quality: qualityList) {
-            driver.checkBoxClickById(quality); //check attribute versatile
+            driver.getDriver().findElement(By.id(quality + "_box")).click();
+            //driver.checkBoxClickById(quality); //check attribute versatile
         }
         List<WebElement> qualitiesElements = driver.getQualitiesElements();
         for (WebElement qualityCheckBox: qualitiesElements) {
             if (!qualityList.contains(qualityCheckBox.getAttribute("id"))) {
-                assertTrue(driver.elementByIdHasAttribute(qualityCheckBox.getAttribute("id"), "disabled")); //quality is disabled
+                assertTrue(driver.elementByIdHasAttribute(qualityCheckBox.getAttribute("id") + "_checkbox", "disabled")); //quality is disabled
             }
         }
 
@@ -701,7 +705,7 @@ public class BrowserIntegrationTest {
         driver.checkBoxClickById(qualityList.remove(0));
         for (WebElement qualityCheckBox: qualitiesElements) {
             if (!qualityList.contains(qualityCheckBox.getAttribute("id"))) {
-                assertFalse(driver.elementByIdHasAttribute(qualityCheckBox.getAttribute("id"), "disabled")); //quality is enabled
+                assertFalse(driver.elementByIdHasAttribute(qualityCheckBox.getAttribute("id") + "_checkbox", "disabled")); //quality is enabled
             }
         }
 
@@ -1015,7 +1019,7 @@ public class BrowserIntegrationTest {
         for (WebElement qualityCheckBox: qualitiesElements) {
             String id = qualityCheckBox.getAttribute("id");
             System.out.printf("id: " + id);
-            if (qualityList.contains(id)) {
+            if (qualityList.contains(id.replace("_checkbox", ""))) {
                 System.out.println(" - checked");
                 assertTrue(driver.isBoxCheckedById(id)); //quality is checked
             } else {

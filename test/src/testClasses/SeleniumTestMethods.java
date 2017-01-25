@@ -380,10 +380,13 @@ public abstract class SeleniumTestMethods {
 
         //check 6 qualities and make sure that all other qualities are disabled
         List<String> qualityList = new ArrayList<>(Arrays.asList("confident", "flexible", "broad-minded", "analytical", "determined", "hardworking"));
+
         for (String quality : qualityList) {
-            checkBoxClickById(quality); //check attribute versatile
+            //checkBoxClickById(quality); //check attribute versatile
+            driver.findElement(By.id(quality + "_box")).click();
             waitFor(shortWaitTime);
         }
+
 
         /*
          * Slide 7 - Achievement & Awards
